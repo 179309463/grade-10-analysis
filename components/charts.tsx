@@ -61,7 +61,7 @@ export function OverallScoreChart({ data, lineColor }: OverallScoreChartProps) {
       >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="label" />
-        <YAxis orientation="left" width={40} />
+        <YAxis orientation="left" width={40} domain={[0, 750]} /> {/* Set max to 750 */}
         <Tooltip content={<CustomTooltip />} />
         <Line
           type="monotone"
@@ -131,10 +131,11 @@ export function OverallRankChart({ data, lineColor }: OverallRankChartProps) {
 interface SubjectScoreChartProps {
   data: ChartData[]
   subject: string
-  lineColor: string // 新增 prop
+  lineColor: string
+  maxScore: number // Add maxScore prop
 }
 
-export function SubjectScoreChart({ data, subject, lineColor }: SubjectScoreChartProps) {
+export function SubjectScoreChart({ data, subject, lineColor, maxScore }: SubjectScoreChartProps) {
   const chartData = data.map((item) => ({
     ...item,
     label: item.examName,
@@ -154,7 +155,7 @@ export function SubjectScoreChart({ data, subject, lineColor }: SubjectScoreChar
       >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="label" />
-        <YAxis width={40} />
+        <YAxis width={40} domain={[0, maxScore]} /> {/* Use maxScore here */}
         <Tooltip content={<CustomTooltip />} />
         <Line
           type="monotone"

@@ -204,6 +204,22 @@ const getOverallRankAnalysis = (data: typeof academicData) => {
 export default function AcademicReport() {
   const selectedSubjects = ["语文", "数学", "英语", "物理", "化学", "生物"] as const
 
+  // Add a helper function to get max score for each subject
+  const getMaxScoreForSubject = (subject: string): number => {
+    switch (subject) {
+      case "语文":
+      case "数学":
+      case "英语":
+        return 150
+      case "物理":
+      case "化学":
+      case "生物":
+        return 100
+      default:
+        return 100 // Default for unknown subjects
+    }
+  }
+
   // 获取整体总分趋势和颜色
   const overallScoreAnalysis = getOverallScoreAnalysis(academicData)
   const overallScoreLineColor = getTrendColor(overallScoreAnalysis.trend)
@@ -443,6 +459,7 @@ export default function AcademicReport() {
           {selectedSubjects.map((subject) => {
             const scoreAnalysis = getScoreAnalysis(academicData, subject)
             const scoreLineColor = getTrendColor(scoreAnalysis.trend)
+            const maxScore = getMaxScoreForSubject(subject) // Get max score for current subject
             return (
               <Card key={`score-chart-card-${subject}`} className="mb-0 shadow-hazy-card">
                 {" "}
@@ -452,7 +469,13 @@ export default function AcademicReport() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-gray-600 mb-4" dangerouslySetInnerHTML={scoreAnalysis}></p>
-                  <SubjectScoreChart data={academicData} subject={subject} lineColor={scoreLineColor} />
+                  <SubjectScoreChart
+                    data={academicData}
+                    subject={subject}
+                    lineColor={scoreLineColor}
+                    maxScore={maxScore}
+                  />{" "}
+                  {/* Pass maxScore */}
                 </CardContent>
               </Card>
             )
